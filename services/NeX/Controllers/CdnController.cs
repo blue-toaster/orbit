@@ -45,7 +45,7 @@ public class CdnController : ControllerBase
 
       if (!imageExts.Contains(fileExt))
       {
-        return BadRequest("Unallowed File Extention");
+        return BadRequest($"{fileExt} Is not allowed, only {String.Join(", ", imageExts)} are allowed");
       }
 
       if (filesys.Exists($"{ASSET_LOCATION}/{file.FileName}"))
@@ -58,7 +58,7 @@ public class CdnController : ControllerBase
         await file.CopyToAsync(stream);
       }
 
-      return Ok("File Successfully Uploaded");
+      return Ok("Uploaded");
     }
 
     return BadRequest("Invalid");
