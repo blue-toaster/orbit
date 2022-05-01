@@ -82,7 +82,7 @@ public class CdnController : ControllerBase
 
   private IActionResult VerifyJWT()
   {
-    if (Request.Headers["Authorization"].Count() == 0) return Unauthorized("No Authorization");
+    if (Request.Headers["Authorization"].Count() == 0) return Unauthorized();
 
     try
     {
@@ -94,7 +94,7 @@ public class CdnController : ControllerBase
     }
     catch
     {
-      return Unauthorized("Invalid Token");
+      return Unauthorized();
     }
 
     return Ok("Continue");
