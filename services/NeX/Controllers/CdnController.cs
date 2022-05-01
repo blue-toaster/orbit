@@ -14,7 +14,6 @@ public class CdnController : ControllerBase
 {
   private string ASSET_LOCATION = "./assets";
   private string JWT_SECRET = Environment.GetEnvironmentVariable("JWT_SECRET") ?? throw new Exception("JWT_SECRET environment variable not set");
-  int[] SIZES = { 16, 32, 64, 128, 256, 512, 1024, 2048, 4096 };
 
   [HttpGet("{name}")]
   public IActionResult GetFile(String name, int? size)
