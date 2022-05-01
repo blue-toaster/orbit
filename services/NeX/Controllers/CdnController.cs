@@ -4,8 +4,6 @@ using filesys = System.IO.File;
 using System.Text.RegularExpressions;
 using JWT.Builder;
 using JWT.Algorithms;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing;
 
 namespace nex.Controllers;
 
@@ -61,8 +59,6 @@ public class CdnController : ControllerBase
         await file.CopyToAsync(stream);
       }
 
-      ResizeFile(file.FileName);
-
       return Ok("File Successfully Uploaded");
     }
 
@@ -80,41 +76,9 @@ public class CdnController : ControllerBase
     {
       return NotFound("File Doesn't Exist");
     }
-
-    DeleteResizedFiles(name);
     filesys.Delete(pathToFile);
 
     return Ok("Deleted");
-  }
-
-  private async void ResizeFile(string filename)
-  {
-    var path = $"{ASSET_LOCATION}/{filename}";
-    var name = Path.GetFileNameWithoutExtension(path);
-    var ext = new FileInfo(path).Extension;
-
-    for (int i = 0; i < SIZES.Length; i++)
-    {
-      using var image = Image.Load(path);
-
-      image.Mutate(x => x.Resize(new ResizeOptions { Size = new Size(SIZES[i], SIZES[i]) }));
-      await image.SaveAsync($"{ASSET_LOCATION}/{name}_{SIZES[i]}{ext}");
-    }
-
-    return;
-  }
-
-  private void DeleteResizedFiles(string filename) {
-    var path = $"{ASSET_LOCATION}/{filename}";
-    var name = Path.GetFileNameWithoutExtension(path);
-    var ext = new FileInfo(path).Extension;
-
-    for (int i = 0; i < SIZES.Length; i++)
-    {
-      filesys.Delete($"{ASSET_LOCATION}/{name}_{SIZES[i]}{ext}");
-    }
-
-    return;
   }
 
   private IActionResult VerifyJWT()
